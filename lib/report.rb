@@ -19,7 +19,6 @@ class Report
 
     def summarize(input)
       unique_events = input.map(&get(:event)).uniq
-      puts unique_events
       unique_events.inject({}){ |m, event| m.merge({event => count_event(event, input)}) }
     end
   end
