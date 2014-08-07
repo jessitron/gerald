@@ -2,7 +2,6 @@ require_relative 'gerald'
 
 class Report
 
-  @sum = ->(a,b) { a + b }
 
   class << self
     def get(field)
@@ -17,19 +16,32 @@ class Report
       input.map(&get(:event)).map(&count_if_eq(:search)).reduce(&@sum)
     end
 
+    def sum; ->(a,b) { a + b } end
+
+    def event_count_gerald(event)
+      Gerald.new(#the abelian group is Int
+        ->(input) { count_if_eq(event).call(input[:event]) },
+        sum,
+        0,
+        ->(output, count) { output.merge( {event => count} )},
+        event.to_s
+      )
+    end
+
     def different_users_gerald
-      Gerald.new(
+      Gerald.new( #the abelian group is Set
         ->(input) { Set.new [input[:userid]]},
         ->(s1,s2) { s1.merge(s2)},
         Set.new,
-        ->(output,s) { output.merge({different_users: s.size})})
+        ->(output,s) { output.merge({different_users: s.size})},
+                "unique-users")
     end
 
     def summarize(input)
-      defaults = {search: 0, click: 0, different_users: 0}
-      unique_events = input.map(&get(:event)).uniq
-      output = unique_events.inject(defaults){ |m, event| m.merge({event => count_event(event, input)}) }
-      different_users_gerald.process(input, output)
+      event_geralds = [:search, :click].map{|e| event_count_gerald(e)}
+      output = Gerald.combine(event_geralds.push different_users_gerald).process(input, {})
+
+      output
     end
   end
 end
