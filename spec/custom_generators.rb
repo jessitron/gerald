@@ -9,10 +9,10 @@ class CustomGenerators
       Rantly.singleton
     end
     def activity_record
-      Generator.new ( ->(){ { event: rantly.choose(@valid_events) } } )
+      Generator.new( ->(){ { event: rantly.choose(@valid_events) } } ).not_shrinkable
     end
     def activity_record_for(event)
-      Generator.new( ->() {{event: event}})
+      Generator.new( ->() {{event: event}}).not_shrinkable
     end
   end
 end

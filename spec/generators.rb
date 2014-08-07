@@ -1,8 +1,13 @@
 require 'rantly'
+require_relative 'shrinkers'
 
 class Generator
   def initialize(how_to_produce)
     @produce = how_to_produce
+  end
+
+  def not_shrinkable
+    Generator.new(->() { Shrinkers.do_not_shrink(sample)})
   end
 
   def sample
@@ -43,9 +48,19 @@ module Generators
       })
     end
 
+    def const(value)
+      Generator.new(->{value})
+    end
+
     def some_array_len(max=100)
+      # this won't work with max < 2
       # I want this to emphasize smaller numbers. maybe later.
-      Generator.new( ->() {rantly.range(0,max)} )
+
+      Generator.new( ->() {
+        rantly.freq([10, ->(r) {0}],
+                    [10, ->(r) {1}],
+                    [5,  ->(r) {2}],
+                    [75, ->(r) {r.range(0,max)} ])} )
     end
 
     def rantly; Rantly.singleton end
