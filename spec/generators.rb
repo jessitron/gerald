@@ -9,6 +9,10 @@ class Generator
     @produce.call
   end
 
+  def sampleN(n)
+    (1..n).map{ |x| sample}
+  end
+
   def filter(predicate)
     inner = self
     Generator.new -> do
@@ -35,7 +39,7 @@ module Generators
 
     def any_number_of(inner)
       Generator.new( ->() {
-        (1..some_array_len.sample).map{ |x| inner.sample}
+        inner.sampleN(some_array_len.sample)
       })
     end
 
