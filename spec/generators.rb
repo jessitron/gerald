@@ -35,13 +35,13 @@ module Generators
 
     def any_number_of(inner)
       Generator.new( ->() {
-        (1..random_array_len).map{ |x| inner.sample}
+        (1..some_array_len.sample).map{ |x| inner.sample}
       })
     end
 
-    def random_array_len(max=100)
+    def some_array_len(max=100)
       # I want this to emphasize smaller numbers. maybe later.
-      rantly.range(0,max)
+      Generator.new( ->() {rantly.range(0,max)} )
     end
 
     def rantly; Rantly.singleton end
