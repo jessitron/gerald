@@ -26,7 +26,7 @@ describe Report do
       unique_users = input.map{|m| m[:userid]}.reject{|u|u.nil?}.uniq.size
 
       # this is for checking on whether the test is accomplishing anything
-      various_numbers_of_users.push(unique_users)
+      various_numbers_of_users.push([unique_users, input.size])
       actual = Report.summarize(input)
       expect(actual[:different_users]).to eq(unique_users)
     }
