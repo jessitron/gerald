@@ -8,10 +8,13 @@ class CustomGenerators
       Rantly.singleton
     end
     def activity_record(events=[:search, :click])
-      Generator.new( ->(){ { event: rantly.choose(*events) } } ).not_shrinkable
+      Generator.new( ->(){ { event: rantly.choose(*events), userid: userid.sample } } ).not_shrinkable
     end
     def activity_record_for(event)
       activity_record([event])
+    end
+    def userid
+      Generator.new( ->() { rantly.string })
     end
   end
 end
