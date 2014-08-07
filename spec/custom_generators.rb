@@ -11,5 +11,8 @@ class CustomGenerators
     def activity_record
       Generator.new ( ->(){ { event: rantly.choose(@valid_events) } } )
     end
+    def activity_record_for(event)
+      Generator.new( ->() {{event: event}})
+    end
   end
 end
