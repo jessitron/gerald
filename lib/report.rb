@@ -18,8 +18,9 @@ class Report
     end
 
     def summarize(input)
+      defaults = {search: 0, click: 0}
       unique_events = input.map(&get(:event)).uniq
-      unique_events.inject({}){ |m, event| m.merge({event => count_event(event, input)}) }
+      unique_events.inject(defaults){ |m, event| m.merge({event => count_event(event, input)}) }
     end
   end
 end
