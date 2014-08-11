@@ -11,7 +11,7 @@ way.
 If you don't believe me, check @avibryant's talk from StrangeLoop:
 http://www.infoq.com/presentations/abstract-algebra-analytics
 
-The architecture of a Gerald is:
+The architecture is:
 
 from a value, transform it (along with needed context) into something that we
 can add. For instance, you can't sum averages... until you include the
