@@ -18,6 +18,16 @@ class Generator
     (1..n).map{ |x| sample}
   end
 
+  def reject(predicate)
+    inner = self
+    Generator.new -> do
+      begin
+        r = inner.sample
+      end until (not predicate.call(r))
+      r
+    end
+  end
+
   def filter(predicate)
     inner = self
     Generator.new -> do
@@ -26,6 +36,8 @@ class Generator
         r = inner.sample
       end until predicate.(r)
       # consider using rantly.guard instead of looping
+      # OR rewriting that mechanism so I can still use
+      # generators outside a property_of block
       r
     end
   end
