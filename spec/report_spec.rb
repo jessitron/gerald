@@ -5,9 +5,13 @@ describe Report do
 
   it 'counts search events' do
     property_of {
-      Generators.of_two(Generators.const(0), #Generators.some_array_len,
-       Generators.any_number_of(
-         CustomGenerators.activity_record.filter(->(a) {a[:event] != :search}))).sample
+      search_event = ->(e) {e[:event] == :search}
+      Generators.of_two(
+        Generators.some_array_len,
+        Generators.any_number_of(
+          CustomGenerators.activity_record.
+          reject(search_event))).
+        sample
     }.check do |(search_count, other_events)|
       search_events = CustomGenerators.activity_record_for(:search).sampleN(search_count)
       input = search_events + other_events
