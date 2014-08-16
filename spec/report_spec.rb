@@ -6,18 +6,16 @@ describe Report do
   it 'counts search events' do
     property_of {
       search_event = ->(e) {e[:event] == :search}
-      Generators.of(
-        Generators.any_number_of(
-          CustomGenerators.activity_record_for(:search)),
-        Generators.any_number_of(
-          CustomGenerators.activity_record.
-          reject(search_event))).
-        sample
-    }.check do |(search_events, other_events)|
-      input = search_events + other_events
-      actual = Report.summarize(input)
-
-      seach_count = search_events.size
+      Generators.some_array_len.map(->(search_count) {
+        search_events = CustomGenerators.activity_record_for(:search).
+                             sample_n(search_count)
+        other_events =  Generators.any_number_of(
+                          CustomGenerators.activity_record.
+                                           reject(search_event)).sample
+        Shrinkers.fixed_len_array([search_count, search_events + other_events])
+      }).sample
+    }.check do |(search_count, all_events)|
+      actual = Report.summarize(all_events)
       expect(actual[:search]).to eq(search_count)
     end
   end
