@@ -13,7 +13,7 @@ describe Report do
           reject(search_event))).
         sample
     }.check do |(search_count, other_events)|
-      search_events = CustomGenerators.activity_record_for(:search).sampleN(search_count)
+      search_events = CustomGenerators.activity_record_for(:search).sample_n(search_count)
       input = search_events + other_events
       actual = Report.summarize(input)
 

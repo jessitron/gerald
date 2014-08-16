@@ -1,5 +1,4 @@
-require_relative 'generators'
-require 'rantly'
+require 'generatron'
 
 class CustomGenerators
   class << self
